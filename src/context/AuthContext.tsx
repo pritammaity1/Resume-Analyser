@@ -12,6 +12,8 @@ import type { AuthUser, AuthState, LoginWithGoogle, Logout } from "@/types";
 // context type
 
 type AuthContextType = AuthState & {
+  user: AuthUser | null;
+  loading: boolean;
   loginWithGoogle: LoginWithGoogle;
   logout: Logout;
 };
