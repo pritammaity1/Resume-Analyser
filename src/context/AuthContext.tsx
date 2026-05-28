@@ -18,9 +18,9 @@ type AuthContextType = AuthState & {
   logout: Logout;
 };
 
-// crete context
+// create context
 
-const AuthConetext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 // provider
 
@@ -50,16 +50,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthConetext.Provider value={{ user, loading, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>
       {children}
-    </AuthConetext.Provider>
+    </AuthContext.Provider>
   );
 }
 
 //Hooks
 
 export function useAuth(): AuthContextType {
-  const ctx = useContext(AuthConetext);
+  const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("UseAuth must to be inside AuthProvider");
   return ctx;
 }
