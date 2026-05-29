@@ -29,7 +29,7 @@ export type ProgressBarProps = {
 
 export type EmptyStateProps = {
   title: string;
-  descrription: string;
+  description: string;
   actionLabel?: string;
   onAction?: () => void;
 };
