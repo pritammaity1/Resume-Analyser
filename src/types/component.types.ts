@@ -74,8 +74,8 @@ export type UploadFile = {
 };
 
 export type UploadCardProps = {
-  onFile: (file: UploadFile) => void;
-  uploaded?: UploadFile | "null";
+  onFile: (file: UploadFile | null) => void;
+  uploaded?: UploadFile | null;
 };
 
 export type JobContextCardProps = {
@@ -83,7 +83,7 @@ export type JobContextCardProps = {
   onChange: (value: string) => void;
   onAnalyze: () => void;
   isLoading: boolean;
-  isaDisabled: boolean;
+  isDisabled: boolean;
 };
 
 // Dashboard
