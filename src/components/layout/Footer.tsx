@@ -1,45 +1,66 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-white mt-auto">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          className="flex flex-col sm:flex-row items-center
-                        justify-between py-6 gap-4"
+    <footer
+      style={{
+        paddingTop: "30px",
+        paddingBottom: "30px",
+      }}
+      className="bg-gray-100"
+    >
+      <div
+        style={{
+          maxWidth: "1300px",
+          margin: "0 auto",
+          paddingLeft: "2rem",
+          paddingRight: "2rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
+      >
+        {/* Logo */}
+        <p
+          style={{
+            fontSize: "15px",
+            fontWeight: "700",
+            color: "#111827",
+            margin: 0,
+          }}
         >
-          {/* Logo */}
-          <span className="font-bold text-gray-900 text-sm">
-            Resume<span className="text-blue-600">IQ</span>
-          </span>
+          Resume<span style={{ color: "#1d4ed8" }}>IQ</span>
+        </p>
 
-          {/* Links */}
-          <div className="flex items-center gap-6">
+        {/* Links */}
+        <div style={{ display: "flex", gap: "32px" }}>
+          {["Help Center", "Privacy Policy", "Terms of Service"].map((item) => (
             <a
+              key={item}
               href="#"
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              style={{
+                fontSize: "14px",
+                color: "#6b7280",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#111827")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#6b7280")}
             >
-              Help Center
+              {item}
             </a>
-
-            <a
-              href="#"
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              Privacy Policy
-            </a>
-
-            <a
-              href="#"
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              Terms of Service
-            </a>
-          </div>
-
-          {/* Copyright */}
-          <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} ResumeIQ. All rights reserved.
-          </p>
+          ))}
         </div>
+
+        {/* Copyright */}
+        <p
+          style={{
+            fontSize: "13px",
+            color: "#9ca3af",
+            margin: 0,
+          }}
+        >
+          © {new Date().getFullYear()} ResumeIQ . All rights reserved.
+        </p>
       </div>
     </footer>
   );

@@ -1,4 +1,3 @@
-import { Briefcase, X } from "lucide-react";
 import type { JobContextCardProps } from "@/types";
 
 export default function JobContextCard({
@@ -8,56 +7,50 @@ export default function JobContextCard({
   isLoading,
   isDisabled,
 }: JobContextCardProps) {
-  const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
-
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col h-full">
-      <div className="bg-white items-center justify-between mb-3 ">
-        <div className="flex items-center gap-2">
-          <Briefcase size={15} className="text-gray-400" />
-          <h3 className="text-sm font-semibold text-gray-900">Job Context</h3>
-        </div>
-
-        <span className="text-xs text-gray-400">Optional</span>
-      </div>
-
-      <div className="relative flex-1 mb-4">
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Paste the job description here for a targeted match score and tailored rewrite... "
-          className="w-full h-full min-h-45 resize-none text-sm text-gray-700 placeholder:text-gray-300 border border-gray-200 rounded-lg p-3 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-50 transition-all"
-        />
-
-        {/* clear button */}
-        {value && (
-          <button
-            className="absolue top-2 right-2 p-1 rounded text-gray-300 hover:text-gray-500 hover:bg-gray-100 transition-colors"
-            onClick={() => onChange("")}
-            type="button"
-          >
-            <X size={14} />
-          </button>
-        )}
-      </div>
-
-      {/* Footer - word count + analyze button */}
-
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-xs text-gray-400">
-          {wordCount > 0 ? `${wordCount} Words` : "No text yet"}
-        </span>
-
-        {/* Analyze Button */}
-        <button
-          type="button"
-          onClick={onAnalyze}
-          disabled={isDisabled || isLoading}
-          className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${isDisabled || isLoading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"}`}
-        >
-          {isLoading ? "Analyzing..." : "Analyze Now ->"}
-        </button>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Paste job description text here..."
+        style={{
+          flex: 1,
+          width: "100%",
+          resize: "none",
+          fontSize: "14px",
+          color: "#374151",
+          border: "1px solid #e5e7eb",
+          borderRadius: "10px",
+          padding: "14px",
+          outline: "none",
+          marginBottom: "14px",
+          minHeight: "260px",
+          fontFamily: "inherit",
+          lineHeight: "1.6",
+        }}
+        onFocus={(e) => (e.target.style.borderColor = "#3b82f6")}
+        onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+      />
+      <button
+        type="button"
+        onClick={onAnalyze}
+        disabled={isDisabled || isLoading}
+        style={{
+          width: "100%",
+          padding: "14px",
+          borderRadius: "10px",
+          border: "none",
+          fontSize: "15px",
+          fontWeight: "600",
+          cursor: isDisabled || isLoading ? "not-allowed" : "pointer",
+          background: isDisabled || isLoading ? "#f3f4f6" : "#1d4ed8",
+          color: isDisabled || isLoading ? "#9ca3af" : "#ffffff",
+          transition: "all 0.2s",
+          fontFamily: "inherit",
+        }}
+      >
+        {isLoading ? "Analyzing..." : "Analyze Now"}
+      </button>
     </div>
   );
 }

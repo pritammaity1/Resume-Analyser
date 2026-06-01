@@ -1,10 +1,10 @@
 import * as pdfjsLib from "pdfjs-dist";
 import mammoth from "mammoth";
+import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 // pdf.js works and tells where to find the worker file
 
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.7.284/pdf.worker.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // extract text from pdf
 

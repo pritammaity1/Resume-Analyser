@@ -22,7 +22,12 @@ export function useHistory() {
       setLoading(true);
       setError(null);
       const data = await getUserAnalysis(user.uid);
-      setAnalyses(data);
+      setAnalyses(
+        data.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);

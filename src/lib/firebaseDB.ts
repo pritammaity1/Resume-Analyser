@@ -39,11 +39,7 @@ export async function getUserAnalysis(
   userId: string,
 ): Promise<SavedAnalysis[]> {
   try {
-    const q = query(
-      collection(db, "analysis"),
-      where("userId", "==", userId),
-      orderBy("createdAt", "desc"),
-    );
+    const q = query(collection(db, "analysis"), where("userId", "==", userId));
 
     const snapshot = await getDocs(q);
 

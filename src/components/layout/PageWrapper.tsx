@@ -5,7 +5,15 @@ export default function PageWrapper({
   className = "",
 }: PageWrappersProps) {
   return (
-    <div className={`max-w-6xl mx-auto px-4 sm:px-4 lg:px-8 ${className}`}>
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        paddingLeft: "2rem",
+        paddingRight: "2rem",
+      }}
+      className={className}
+    >
       {children}
     </div>
   );

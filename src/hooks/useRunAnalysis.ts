@@ -3,24 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAnalysis } from "@/context/AnalysisContext";
 import { extractTextFromFile } from "@/utils/extractText";
-import { analyzeResume, rewriteRsume } from "@/utils/ai";
+import { analyzeResume } from "@/utils/ai";
 import { saveAnalysis } from "@/lib/firebaseDB";
 import type { UploadFile } from "@/types";
 
-export type AnalysisStep =
-  | "extracting"
-  | "analyzing"
-  | "rewrite"
-  | "saving"
-  | "done";
-
-// hooks
+export type AnalysisStep = "extracting" | "analyzing" | "saving" | "done";
 
 export function useRunAnalysis() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const { setResult, setResumeText, setIsAnalyzing, setError } = useAnalysis();
+  const {
+    setResult,
+    setResumeText,
+    setJobDescription,
+    setIsAnalyzing,
+    setError,
+  } = useAnalysis();
 
   const [currentStep, setCurrentStep] = useState<AnalysisStep | null>(null);
 
@@ -32,39 +31,29 @@ export function useRunAnalysis() {
       setIsAnalyzing(true);
       setError(null);
 
-      // extraction text from file
+      // step 1 — extract text from file
       setCurrentStep("extracting");
       const resumeText = await extractTextFromFile(uploadFile.file);
       setResumeText(resumeText);
+      setJobDescription(jobDescription);
 
-      //analyzing through gemini
-
+      // step 2 — analyze with gemini
       setCurrentStep("analyzing");
       const result = await analyzeResume(resumeText, jobDescription);
 
-      // rewriting resume
-      setCurrentStep("rewrite");
-      const rewrite = await rewriteRsume(
-        resumeText,
-        jobDescription,
-        result.missing_keywords,
-      );
-
-      // attach rewrite to result
-
+      // attach empty rewrite for now
       const finalResult = {
         ...result,
-        rewritten_resume: rewrite,
+        rewritten_resume: "",
       };
 
-      // save to firebase if logged in
+      // step 3 — save to firebase if logged in
       if (user) {
         setCurrentStep("saving");
         await saveAnalysis(finalResult, user.uid);
       }
 
-      // store in context + navigate
-
+      // step 4 — done
       setCurrentStep("done");
       setResult(finalResult);
       navigate("/dashboard");
@@ -79,5 +68,6 @@ export function useRunAnalysis() {
       setCurrentStep(null);
     }
   };
+
   return { run, currentStep };
 }

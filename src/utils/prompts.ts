@@ -2,17 +2,15 @@
 
 export function buildScoringPrompt(resumeText: string, jobDescription: string) {
   return `
-    You are an expert ATS (Applicant Tracking System) and 
-senior recruiter with 10 years of hiring experience.
-
-Analyze the resume against the job description below.
+You are an ATS expert and senior recruiter.
+Analyze the resume against the job description.
 
 STRICT RULES:
 - Return ONLY a valid JSON object
 - No markdown, no backticks, no extra text
 - No explanation before or after the JSON
 - All arrays must have at least 1 item
-- ats_score must be a number between 0 and 100
+- All scores must be numbers between 0 and 100
 
 RESUME:
 ${resumeText}
@@ -24,29 +22,29 @@ Return this EXACT JSON structure:
 {
   "ats_score": <number 0-100>,
   "score_breakdown": {
-    "keyword_match": <number 0-40>,
-    "skills_match": <number 0-30>,
-    "experience_relevance": <number 0-20>,
-    "format_score": <number 0-10>
+    "keyword_match": <number 0-100>,
+    "skills_match": <number 0-100>,
+    "experience_relevence": <number 0-100>,
+    "format_score": <number 0-100>
   },
   "matched_keywords": ["keyword1", "keyword2"],
   "missing_keywords": ["keyword1", "keyword2"],
-  "skill_gaps": ["gap description 1", "gap description 2"],
-  "strengths": ["strength 1", "strength 2"],
-  "quick_wins": ["quick win 1", "quick win 2"],
+  "skill_gaps": ["gap1", "gap2"],
+  "strengths": ["strength1", "strength2"],
+  "quick_wins": ["win1", "win2"],
   "improvement_tasks": [
     {
       "id": "task_1",
       "type": "keyword",
-      "title": "Add missing keyword",
-      "description": "Specific description of what to add",
+      "title": "Short title",
+      "description": "What to fix",
       "priority": "high"
     }
   ],
   "recommended_phrases": [
     {
       "label": "IMPROVE IMPACT",
-      "phrase": "Suggested phrase to add to resume"
+      "phrase": "Phrase to add"
     }
   ],
   "soft_skills": [
@@ -55,21 +53,19 @@ Return this EXACT JSON structure:
       "score": 75
     }
   ],
-  "document_stats": {
+  "document_status": {
     "word_count": <number>,
     "reading_level": "Grade 12",
     "experience_years": <number>
   },
-  "job_title": "exact job title from job description",
-  "company": "company name from job description",
-  "candidate_tip": "One specific tip about this employer"
+  "job_title": "job title from description",
+  "company": "company name or empty string",
+  "candidate_tip": "One specific actionable tip"
 }
 `;
 }
 
-// rewrite prompt
-
-// tells gemini to rewrite the resume according to match the jd
+// tells gemini to rewrite the resume to match the job description
 
 export function buildRewritePrompt(
   resumeText: string,
@@ -77,30 +73,26 @@ export function buildRewritePrompt(
   missingKeywords: string[],
 ) {
   return `
-  You are a world-class resume writer and career coach.
+You are a professional resume writer.
+Rewrite the resume to better match the job description.
 
-Rewrite the resume below to better match the job description.
-
-STRICT RULES:
+RULES:
 - NEVER fabricate experience, skills or achievements
-- NEVER add companies or roles that are not in the original
 - Only rephrase and restructure what already exists
 - Naturally incorporate missing keywords where truthful
-- Use strong action verbs (Led, Built, Delivered, Optimized)
-- Mirror the exact language used in the job description
-- Keep all dates, companies and titles accurate
+- Use strong action verbs
 - Return ONLY the rewritten resume text
-- No commentary, no explanation, no extra text
+- No commentary or explanation
 
-ORIGINAL RESUME:
+RESUME:
 ${resumeText}
 
-TARGET JOB DESCRIPTION:
+JOB DESCRIPTION:
 ${jobDescription}
 
-MISSING KEYWORDS TO ADD (only if truthfully applicable):
+MISSING KEYWORDS:
 ${missingKeywords.join(", ")}
 
-Return the complete rewritten resume text only.
+Return the rewritten resume text only.
   `;
 }
