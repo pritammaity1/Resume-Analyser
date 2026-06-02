@@ -22,7 +22,7 @@ const server = http.createServer(async (req, res) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.2, maxOutputTokens: 8192 },
+          generationConfig: { temperature: 0, maxOutputTokens: 8192 },
         }),
       });
 

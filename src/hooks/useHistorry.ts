@@ -64,7 +64,7 @@ export function useHistory() {
   const handleLoad = (analysis: SavedAnalysis): void => {
     const result: AnalysisResult = {
       ats_score: analysis.atsScore,
-      score_breakdown: {
+      score_breakdown: analysis.scoreBreakdown ?? {
         keyword_match: 0,
         skills_match: 0,
         experience_relevence: 0,
@@ -74,11 +74,11 @@ export function useHistory() {
       missing_keywords: analysis.missingKeyWords,
       skill_gaps: analysis.skillGaps,
       strengths: analysis.strengths,
-      quick_wins: [],
-      improvement_tasks: [],
-      recommended_phrases: [],
-      soft_skills: [],
-      document_status: {
+      quick_wins: analysis.quickWins ?? [],
+      improvement_tasks: analysis.improvementTasks ?? [],
+      recommended_phrases: analysis.recommendedPhrases ?? [],
+      soft_skills: analysis.softSkills ?? [],
+      document_status: analysis.documentStatus ?? {
         word_count: 0,
         reading_level: "",
         experience_years: 0,
@@ -86,7 +86,7 @@ export function useHistory() {
       rewritten_resume: analysis.rewrittenResume,
       job_title: analysis.jobTitle,
       company: analysis.company,
-      candidate_tip: "",
+      candidate_tip: analysis.candidateTip ?? "",
     };
     setResult(result);
     navigate("/dashboard");

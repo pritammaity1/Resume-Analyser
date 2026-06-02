@@ -1,27 +1,33 @@
 import type { AnalysisResult } from "./analysis.types";
 
 export type SavedAnalysis = {
-  id: string; // Fire-Store auto generated document ID
-  userId: string; //Firebase auth UID-linked with server
-  jobTitle: string; // e.g 'Frontend developer'
-  company: string; // e.g "Google"
-  atsScore: number; // e.g 90
-  matchedKeyWords: string[]; // [e.g "React, js"]
-  missingKeyWords: string[]; //[e.g "Docker, CI/CD"]
-  skillGaps: string[]; //[e.g "No CI/CD experience"]
-  strengths: string[]; //[e.g "strong react skills"]
-  rewrittenResume: string; // full rewritten resume text
-  createdAt: string; // ISO date string e.g. "2026-01-15T10:30:00.000Z"
+  id: string;
+  userId: string;
+  jobTitle: string;
+  company: string;
+  atsScore: number;
+  matchedKeyWords: string[];
+  missingKeyWords: string[];
+  skillGaps: string[];
+  strengths: string[];
+  rewrittenResume: string;
+  createdAt: string;
+  // full data
+  scoreBreakdown: {
+    keyword_match: number;
+    skills_match: number;
+    experience_relevence: number;
+    format_score: number;
+  };
+  quickWins: string[];
+  improvementTasks: AnalysisResult["improvement_tasks"];
+  recommendedPhrases: AnalysisResult["recommended_phrases"];
+  softSkills: AnalysisResult["soft_skills"];
+  documentStatus: AnalysisResult["document_status"];
+  candidateTip: string;
 };
 
-// waht we send to firebase when saving
-// same as saved analysis but without id
-// firebase generates the id automatically
-
 export type NewAnalysisPayload = Omit<SavedAnalysis, "id">;
-
-// helper function to convert analysis result
-// into a new analysis payload for saving
 
 export function toFirebasePayload(
   result: AnalysisResult,
@@ -38,5 +44,13 @@ export function toFirebasePayload(
     strengths: result.strengths,
     rewrittenResume: result.rewritten_resume,
     createdAt: new Date().toISOString(),
+    // full data
+    scoreBreakdown: result.score_breakdown,
+    quickWins: result.quick_wins,
+    improvementTasks: result.improvement_tasks,
+    recommendedPhrases: result.recommended_phrases,
+    softSkills: result.soft_skills,
+    documentStatus: result.document_status,
+    candidateTip: result.candidate_tip,
   };
 }

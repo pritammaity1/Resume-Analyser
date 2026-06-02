@@ -334,16 +334,6 @@ export default function LoadingScreen({
         </div>
 
         {/* Footer */}
-        <p
-          style={{
-            fontSize: 12,
-            color: "#9ca3af",
-            marginTop: 28,
-            textAlign: "center",
-          }}
-        >
-          ✦ Powered by Google Gemini 2.0 Flash
-        </p>
       </div>
 
       <style>{`

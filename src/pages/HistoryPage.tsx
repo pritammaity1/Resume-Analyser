@@ -5,7 +5,6 @@ import {
   RotateCcw,
   Clock,
   ChevronRight,
-  Plus,
   TrendingUp,
   BarChart2,
   Target,

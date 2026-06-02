@@ -6,7 +6,6 @@ import {
   doc,
   query,
   where,
-  orderBy,
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";

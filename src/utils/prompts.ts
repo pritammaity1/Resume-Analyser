@@ -12,6 +12,13 @@ STRICT RULES:
 - All arrays must have at least 1 item
 - All scores must be numbers between 0 and 100
 
+SCORING RULES (follow exactly):
+- ats_score: weighted average = (keyword_match * 0.40) + (skills_match * 0.30) + (experience_relevence * 0.20) + (format_score * 0.10)
+- keyword_match: count exact + partial keyword matches from JD found in resume, score 0-100
+- skills_match: compare required skills in JD vs skills listed in resume, score 0-100  
+- experience_relevence: how relevant the experience/projects are to the role, score 0-100
+- format_score: resume structure, readability, length appropriateness, score 0-100
+
 RESUME:
 ${resumeText}
 
