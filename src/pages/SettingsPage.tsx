@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Mail,
   Calendar,
-  Sparkles,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 

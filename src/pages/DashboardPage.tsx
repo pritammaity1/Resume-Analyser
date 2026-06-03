@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  
   Briefcase,
   Download,
   Copy,
@@ -27,7 +26,7 @@ import PageWrapper from "@/components/layout/PageWrapper";
 import EmptyState from "@/components/shared/EmptyState";
 import type { ImprovementTask } from "@/types";
 
-//  helpers 
+//  helpers
 
 function getColor(score: number) {
   if (score >= 80)
@@ -71,7 +70,7 @@ const CHECKS = [
   { label: "Contact info present", min: 30 },
 ];
 
-// ── card shell 
+// ── card shell
 
 function Card({
   children,
@@ -98,7 +97,7 @@ function Card({
   );
 }
 
-// ── card header 
+// ── card header
 
 function CardHeader({
   icon,
@@ -147,7 +146,7 @@ function CardHeader({
   );
 }
 
-// ── chip 
+// ── chip
 
 function Chip({
   label,
@@ -175,7 +174,7 @@ function Chip({
   );
 }
 
-// ── section label 
+// ── section label
 
 function SectionLabel({ label }: { label: string }) {
   return (
@@ -194,14 +193,16 @@ function SectionLabel({ label }: { label: string }) {
   );
 }
 
-// ── task row 
+// ── task row
 
 function TaskRow({
   task,
   onFix,
+  isFixed,
 }: {
   task: ImprovementTask;
   onFix: () => void;
+  isFixed: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const pc =
@@ -213,7 +214,11 @@ function TaskRow({
 
   return (
     <div
-      style={{ borderBottom: "0.5px solid #f1f5f9" }}
+      style={{
+        borderBottom: "0.5px solid #f1f5f9",
+        opacity: isFixed ? 0.5 : 1,
+        transition: "opacity 0.3s",
+      }}
       className="last:border-0"
     >
       <div
@@ -292,7 +297,7 @@ function TaskRow({
               cursor: "pointer",
             }}
           >
-            <Wrench size={12} /> Mark as Fixed
+            {isFixed ? "✓ Fixed" : "Mark as Fixed"}
           </button>
         </div>
       )}
@@ -300,7 +305,7 @@ function TaskRow({
   );
 }
 
-// page 
+// page
 
 export default function DashboardPage() {
   const { result } = useAnalysis();
@@ -1145,6 +1150,7 @@ export default function DashboardPage() {
                       <TaskRow
                         key={task.id}
                         task={task}
+                        isFixed={fixed.has(task.id)}
                         onFix={() =>
                           setFixed((prev) => {
                             const next = new Set(prev);
