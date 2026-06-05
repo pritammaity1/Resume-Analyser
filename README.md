@@ -1,73 +1,125 @@
-# React + TypeScript + Vite
+# ResumeIQ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered resume analyzer that scores your resume against a job description, finds missing keywords, and gives you a clear action plan to improve your chances.
 
-Currently, two official plugins are available:
+Built this because I was frustrated with generic resume advice. Most tools just tell you what's wrong — this one actually tells you what to fix and how.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## What it does
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+You upload your resume, paste a job description, and within 20 seconds you get:
 
-## Expanding the ESLint configuration
+- An ATS score (0–100) with a breakdown by keywords, skills, experience, and formatting
+- A list of strengths and weaknesses specific to that role
+- Missing keywords the recruiter's system is looking for
+- Actionable improvement tasks sorted by priority
+- Soft skill alignment scores
+- Recommended phrases you can directly add to your resume
+- A personalized tip from the AI based on the job requirements
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Your analysis gets saved to your account so you can track how your resume improves over time across different roles.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tech stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Frontend** — React + TypeScript + Vite
+- **Styling** — Tailwind CSS
+- **AI** — Google Gemini 2.5 Flash
+- **Auth** — Firebase (Google login)
+- **Database** — Firebase Firestore
+- **Backend** — Vercel serverless function (keeps the API key hidden)
+- **File parsing** — pdfjs-dist for PDF, mammoth for DOCX
+
+---
+
+## Getting started locally
+
+**1. Clone the repo**
+
+```bash
+git clone https://github.com/your-username/resume-analyser.git
+cd resume-analyser
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**2. Install dependencies**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+**3. Set up environment variables**
+
+Create a `.env` file in the root:
+
+```
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_MEASUREMENT_ID=your_measurement_id
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+**4. Run the dev API server** (in a separate terminal)
+
+```bash
+node dev-server.js
+```
+
+This runs a local proxy on port 3001 that handles `/api/analyze` during development.
+
+**5. Run the frontend**
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:5173`
+
+---
+
+## How the analysis works
+
+1. Resume text is extracted from the uploaded PDF or DOCX
+2. A structured prompt is built with the resume text and job description
+3. The prompt is sent to `/api/analyze` (a Vercel serverless function)
+4. The function calls Gemini 2.5 Flash and returns a JSON response
+5. The result is stored in React context and the app navigates to the dashboard
+6. If the user is signed in, the result is saved to Firestore automatically
+
+The Gemini API key never touches the browser — it lives only in the serverless function.
+
+---
+
+## Security
+
+- Gemini API key is a server-side environment variable on Vercel
+- Firebase keys are safe to expose (protected by Firestore security rules)
+- Rate limiting: 5 analyses per IP per 24 hours
+- Google login is optional — the app works without an account
+
+---
+
+## Pages
+
+| Route        | Description                                     |
+| ------------ | ----------------------------------------------- |
+| `/`          | Upload resume and job description               |
+| `/dashboard` | Full analysis report with score and action plan |
+| `/match`     | Keyword match details and resume preview        |
+| `/history`   | All saved analyses (requires login)             |
+| `/settings`  | Account and preferences (requires login)        |
+
+---
+
+## Notes
+
+- The rewrite feature is currently disabled to save API quota. Re-enable in `useRunAnalysis.ts`
+- History page requires a Firebase composite index — click the link in the error banner to create it
+- Profile images from Google require `referrerPolicy="no-referrer"` on img tags
+
+---
