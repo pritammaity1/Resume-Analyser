@@ -27,8 +27,22 @@ const server = http.createServer(async (req, res) => {
       });
 
       const data = await geminiRes.json();
-
       console.log("Gemini response:", JSON.stringify(data, null, 2));
+
+      if (data.error) {
+        res.writeHead(503, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error:
+              data.error.code === 503
+                ? "Gemini is busy right now. Please try again in a moment."
+                : data.error.message,
+          }),
+        );
+        return;
+      }
+
       const text = data.candidates[0].content.parts[0].text;
 
       res.writeHead(200, { "Content-Type": "application/json" });
