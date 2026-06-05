@@ -1,6 +1,4 @@
-// src/pages/LandingPage.tsx
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 import { useRunAnalysis } from "@/hooks/useRunAnalysis";
 import NavBar from "@/components/layout/Navbar";
@@ -12,8 +10,9 @@ import JobContextCard from "@/components/landing/JobContextCard";
 import HowItWorks from "@/components/landing/HowItWorks";
 
 import LoadingScreen from "@/components/shared/LoadingScreen";
-import ErrorBanner from "@/components/shared/ErrorBanner";
+
 import type { UploadFile } from "@/types";
+import toast from "react-hot-toast";
 
 export default function LandingPage() {
   const [uploadedFile, setUploadedFile] = useState<UploadFile | null>(null);
@@ -21,6 +20,20 @@ export default function LandingPage() {
 
   const { isAnalyzing, error, setError } = useAnalysis();
   const { run, currentStep } = useRunAnalysis();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        duration: 5000,
+        style: {
+          fontSize: "13px",
+          fontWeight: "500",
+          maxWidth: "420px",
+        },
+      });
+      setError(null);
+    }
+  }, [error]);
 
   const handleAnalyze = async () => {
     if (!uploadedFile) return;
@@ -54,9 +67,6 @@ export default function LandingPage() {
               marginTop: "11.5px",
             }}
           >
-            {error && (
-              <ErrorBanner message={error} onDismiss={() => setError(null)} />
-            )}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Upload Card */}
               <div

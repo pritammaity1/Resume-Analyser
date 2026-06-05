@@ -12,6 +12,14 @@ async function callGeini(prompt: string): Promise<string> {
   });
 
   if (!response.ok) {
+    if (response.status === 503) {
+      throw new Error(
+        "Gemini is busy right now. Please try again in a moment.",
+      );
+    }
+    if (response.status === 429) {
+      throw new Error("Daily limit reached. Please try again tomorrow.");
+    }
     throw new Error("Analysis service failed. Please try again");
   }
 
