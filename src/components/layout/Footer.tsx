@@ -4,6 +4,7 @@ export default function Footer() {
       style={{
         paddingTop: "30px",
         paddingBottom: "30px",
+        marginTop: "25px",
       }}
       className="bg-gray-100"
     >
