@@ -331,11 +331,30 @@ export default function DashboardPage() {
 
   const handleDownloadPDF = async () => {
     if (!reportRef.current) return;
+    // disable animation
+
+    const animatedEls = reportRef.current.querySelectorAll(
+      ".fade-up, .delay-1, .delay-2, .delay-3, .delay-4, .delay-5, .delay-6, .card-lift",
+    );
+    animatedEls.forEach((e1) => {
+      (e1 as HTMLElement).style.opacity = "1";
+      (e1 as HTMLElement).style.transform = "none";
+      (e1 as HTMLElement).style.animation = "none";
+    });
+
     const canvas = await html2canvas(reportRef.current, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#f8fafc",
+      logging: false,
     });
+
+    animatedEls.forEach((el) => {
+      (el as HTMLElement).style.opacity = "";
+      (el as HTMLElement).style.transform = "";
+      (el as HTMLElement).style.animation = "";
+    });
+
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -1169,15 +1188,16 @@ export default function DashboardPage() {
               <div className="fade-up delay-4">
                 <div
                   style={{
-                    background: "#ffffff",
-                    border: "0.5px solid #e2e8f0",
+                    background:
+                      "linear-gradient(135deg, #1e40af 0%, #2563eb 100%)",
                     borderRadius: 14,
-                    padding: "16px 20px",
+                    padding: "20px 24px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexWrap: "wrap",
                     gap: 12,
+                    boxShadow: "0 4px 16px rgba(37,99,235,0.25)",
                   }}
                 >
                   <div>
@@ -1186,7 +1206,7 @@ export default function DashboardPage() {
                         margin: 0,
                         fontSize: 14,
                         fontWeight: 600,
-                        color: "#0f172a",
+                        color: "#ffffff",
                       }}
                     >
                       Export your report
@@ -1195,7 +1215,7 @@ export default function DashboardPage() {
                       style={{
                         margin: "3px 0 0",
                         fontSize: 12,
-                        color: "#94a3b8",
+                        color: "rgba(255,255,255,0.65)",
                       }}
                     >
                       Save as PDF or copy the summary
@@ -1210,9 +1230,9 @@ export default function DashboardPage() {
                         gap: 7,
                         padding: "9px 20px",
                         borderRadius: 999,
-                        border: "0.5px solid #e2e8f0",
-                        background: "#ffffff",
-                        color: "#475569",
+                        border: "1px solid rgba(255,255,255,0.3)",
+                        background: "rgba(255,255,255,0.1)",
+                        color: "#ffffff",
                         fontSize: 13,
                         fontWeight: 600,
                         cursor: "pointer",
@@ -1229,8 +1249,8 @@ export default function DashboardPage() {
                         padding: "9px 20px",
                         borderRadius: 999,
                         border: "none",
-                        background: "#2563eb",
-                        color: "#ffffff",
+                        background: "#ffffff",
+                        color: "#2563eb",
                         fontSize: 13,
                         fontWeight: 600,
                         cursor: "pointer",

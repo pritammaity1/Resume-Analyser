@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FileText } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import GoogleButton from "@/components/auth/GoogleButton";
@@ -6,7 +6,6 @@ import UserMenu from "@/components/auth/UserMenu";
 
 export default function NavBar() {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sl">
@@ -55,7 +54,7 @@ export default function NavBar() {
           {/* Right Side */}
 
           <div className="flex items-center gap-4">
-            <button
+            {/* <button
               onClick={() => navigate("/")}
               style={{
                 display: "flex",
@@ -88,7 +87,7 @@ export default function NavBar() {
               }}
             >
               Analyze Resume
-            </button>
+            </button> */}
 
             {/* Auth Sate */}
 
